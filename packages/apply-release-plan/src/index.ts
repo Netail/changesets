@@ -207,7 +207,13 @@ async function getNewChangelogEntry(
 
   const changelogOpts = config.changelog[1];
   let changesetPath = path.join(cwd, ".changeset");
-  let changelogPath = resolveFrom(changesetPath, config.changelog[0]);
+  let changelogPath;
+
+  try {
+    changelogPath = resolveFrom(changesetPath, config.changelog[0]);
+  } catch {
+    changelogPath = resolveFrom(path.join(__dirname, '..', '..'), config.changelog[0]);
+  }
 
   let possibleChangelogFunc = require(changelogPath);
   if (possibleChangelogFunc.default) {
